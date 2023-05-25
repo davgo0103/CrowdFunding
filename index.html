@@ -1,242 +1,212 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="zh_tw">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Language" content="zh-TW">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>CrowdFunding Webpage</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="./img/recycling-water.png">
+    <meta name="description" content="Core HTML Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/select2/select2.min.css">
+    <link rel="stylesheet" href="vendor/owlcarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="vendor/lightcase/lightcase.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400|Work+Sans:300,400,700" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+    <link href="https://file.myfontastic.com/7vRKgqrN3iFEnLHuqYhYuL/icons.css" rel="stylesheet">
+    <link href="./css/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Modernizr JS for IE8 support of HTML5 elements and media queries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+
 </head>
 
-<body>
-    <h1>CrowdFunding Webpage</h1>
-    <p>合約位址: <span id="contractAddress"></span></p>
-    <p>募資活動狀態: <span id="status"></span></p>
-    <p>目標金額: <span id="goalAmount"></span> ETH</p>
-    <p>投資總額: <span id="totalAmount"></span> ETH</p>
-    <p>投資家數目: <span id="numInvestors"></span></p>
-    <p>截止日期: <span id="deadline"></span></p>
-    <h2>投資</h2>
-    <p>投資金額: <input type="number" id="investmentAmount"></p>
-    <button onclick="fund()">投資</button>
-    <h2>確認是否達成目標金額</h2>
-    <button onclick="checkGoalReached()">確認目標金額</button>
-    <script>
-        // 請修改以下合約位址
-        const contractAddress = '0x09Cd979aCaD6384fACBf8AED829dA0f781fBa31b';
+<body data-spy="scroll" data-target="#navbar-nav-header" class="static-layout">
+    <div class="boxed-page">
+        <section id="gtco-who-we-are" class="bg-white">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" onclick="link()">
+                    <span class="lnr lnr-link"></span>
+                </a>
+                <div class="section-content">
+                    <div class="title-wrap">
+                        <h2 class="section-title animated-underline" >CrowdFunding Webpage<br>快速可靠<b> 公平、安全</b></h2>
+                        <p class="section-sub-title">利用區塊鏈的特性，數據不可修改不可否認 <br> 資料公開透明，誰在浪費一看就知道~</p>
+                        <p class="section-sub-title">請輸入地址：</p>
+                        <center>
+                            <div style="width:550px;height:60px">
+                                <input type="text" autofocus="autofocus" class="form-control" id="user-address"
+                                    style="text-align:center" />
+                                <button onclick="getWaterData()" id="get-water-data"
+                                    class="btn-outline-secondary">獲取鏈上數據</button>
+                            </div>
+                        </center>
 
-        // 請修改以下的 ABI
-        const contractABI = [
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "_duration",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "_goalAmount",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "inputs": [],
-                "name": "checkGoalReached",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "deadline",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "ended",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "fund",
-                "outputs": [],
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "goalAmount",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "investors",
-                "outputs": [
-                    {
-                        "internalType": "address payable",
-                        "name": "addr",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "numInvestors",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [
-                    {
-                        "internalType": "address payable",
-                        "name": "",
-                        "type": "address"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "status",
-                "outputs": [
-                    {
-                        "internalType": "string",
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "totalAmount",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
+                    </div>
 
 
-        // 請修改以下的提供者位址
-        const provider = new Web3.providers.HttpProvider('http://localhost:7545');
+                    <!-- /.row -->
+                </div>
+            </div>
+        </section> <!-- Counter Section -->
+        <section id="gtco-counter" class="overlay bg-fixed">
+            <div class="container">
+                <div class="section-content">
+                    <div class="row">
+                        <!-- Counter Item -->
+                        <div class="col-md-3 col-sm-6 counter-item">
+                            <i class="lnr lnr-earth"></i>
+                            <input id="usage-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">
+                            <h4>用水量</h4>
+                        </div>
+                        <div class="col-md-3 col-sm-6 counter-item">
+                            <i class="lnr lnr-drop"></i>
+                            <input id="quality-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">
+                            <h4>水質</h4>
+                        </div>
+                        <div class="col-md-3 col-sm-6 counter-item">
+                            <i class="lnr lnr-cloud"></i>
+                            <input id="reserve-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">
+                            <h4>儲水量</h4>
+                        </div>
+                        <div class="col-md-3 col-sm-6 counter-item">
+                            <i class="lnr lnr-sync"></i>
+                            <input id="recycled-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">
+                            <h4>回收水量</h4>
+                        </div>
 
-        // 建立 Web3 實例
-        const web3 = new Web3(provider);
-        // 建立合約實例
-        const contract = new web3.eth.Contract(contractABI, contractAddress);
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        // 更新合約資訊的函數
-        async function updateContractInfo() {
-            // 使用 web3 提供的方法獲取合約資訊
-            const goalAmount = await contract.methods.goalAmount().call();
-            const totalAmount = await contract.methods.totalAmount().call();
-            const ended = await contract.methods.ended().call();
-            const numInvestors = await contract.methods.numInvestors().call();
-            const status = await contract.methods.status().call();
-            const deadline = await contract.methods.deadline().call();
+        <section id="gtco-features" class="bg-white">
+            <div class="container">
+                <div class="section-content">
+                    <div class="title-wrap">
+                        <h5 class="section-title">
+                            計費數據 :<br>
+                            <input id="billing-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 30px; color: black; width: 20%;">
+                        </h5>
+                        <p class="section-sub-title">每日用水量低於平均，將有機會獲得虛擬貨幣!!😁</p>
+                    </div>
 
-            // 更新網頁上的資訊
-            document.getElementById('goalAmount').textContent = goalAmount.toString();
-            document.getElementById('totalAmount').textContent = (totalAmount / 1000000000000000000).toString();
-            document.getElementById('numInvestors').textContent = numInvestors.toString();
-            document.getElementById('status').textContent = status;
-            document.getElementById('deadline').textContent = new Date(deadline * 1000).toLocaleString();
-        }
 
-        async function fund() {
-            const investmentAmount = document.getElementById('investmentAmount').value;
-            if (investmentAmount <= 0) {
-                alert('投資金額必須大於零');
-                return;
-            }
+                    <div class="row text-center">
+                        <div class="col-md-4 col-sm-6 ">
+                            <img class="rounded-circle" src="icons/animat-responsive.gif"
+                                alt="Generic placeholder image" width="140" height="140">
+                            <h5 class="mb-4">更新用水量</h5>
+                            <input id="update-total-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: black;">
+                            <p>模擬感測器在與API交互時的過程 </p>
+                            <p>每次更新用水量會將數值加在鏈上的總用水量上 </p>
+                            <p><a class="btn btn-orange" role="button" onclick="updateWaterUsage()"
+                                    id="update-water-usage">更新用水量</a></p>
+                        </div>
+  
+                        <div class="col-md-4 col-sm-6 ">
+                            <img class="rounded-circle" src="icons/animat-checkmark.gif" alt="Generic placeholder image"
+                                width="140" height="140">
+                            <h5 class="mb-4">更新水資源數據</h5>
+                            <p>直接修改上方資料</p>
+                            <p>模擬感測器在與API交互時的過程</p>
+                            <p><a onclick="setWaterData()" id="set-water-data" class="btn btn-orange"
+                                    role="button">更新水資源數據</a></p>
+                        </div>
 
-            try {
-                const accounts = await web3.eth.getAccounts();
-                const overrides = {
-                    value: web3.utils.toWei(investmentAmount, 'ether')
-                };
-                await contract.methods.fund().send({ from: accounts[0], ...overrides,gas: '5000000' });
-                alert('投資成功！');
-                updateContractInfo();
-            } catch (error) {
-                console.error(error);
-                alert('投資失敗！');
-            }
-        }
 
-        async function checkGoalReached() {
-            try {
-                const accounts = await web3.eth.getAccounts();
-                await contract.methods.checkGoalReached().send({ from: accounts[0],gas: '5000000' });
-                alert('目標金額確認完成！');
-                updateContractInfo();
-            } catch (error) {
-                console.error(error);
-                alert('尚未到達截止時間！');
-            }
-        }
+                        <div class="col-md-4 col-sm-6 ">
+                            <img class="rounded-circle" src="icons/animat-customize.gif" alt="Generic placeholder image"
+                                width="140" height="140">
+                            <h5 class="mb-4">獲取總用水量</h5>
+                            <input id="total-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: black;">
+                            <p>可以查看用水量加總</p>
+                            <p>每日用水量低於平均，將有機會獲得虛擬貨幣!!😁</p>
+                            <p><a class="btn btn-orange" role="button" onclick="getWaterUsage()"
+                                    id="get-water-usage">獲取總用水量</a></p>
+                        </div>
 
-        document.getElementById('contractAddress').textContent = contractAddress;
-        updateContractInfo();
-    </script>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <footer class="mastfoot mb-3 bg-white py-4 border-top">
+            <div class="inner container">
+                <div class="row">
+                    <div class="col-md-6 d-flex align-items-center justify-content-md-start justify-content-center">
+                        <p class="mb-0">&copy; 2023. All Right Reserved. Design by <span
+                                style="color: #EC9460">語法魔法師~</span></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <nav class="nav nav-mastfoot justify-content-md-end justify-content-center">
+                            <a class="nav-link" href="#">
+                                <i class="icon-facebook"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="icon-twitter"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="icon-instagram"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="icon-linkedin"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="icon-youtube"></i>
+                            </a>
+                            <a class="nav-link" href="#">
+                                <i class="icon-pinterest"></i>
+                            </a>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- External JS -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="vendor/bootstrap/popper.min.js"></script>
+    <script src="vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="vendor/select2/select2.min.js "></script>
+    <script src="vendor/owlcarousel/owl.carousel.min.js"></script>
+    <script src="vendor/isotope/isotope.min.js"></script>
+    <script src="vendor/lightcase/lightcase.js"></script>
+    <script src="vendor/waypoints/waypoint.min.js"></script>
+    <script src="vendor/countTo/jquery.countTo.js"></script>
+
+    <!-- Main JS -->
+    <script src="./js/sweetalert2.all.min.js"></script>
+    <script src="./js/app.min.js "></script>
+    <script src="./js/web3.min.js"></script>
+    <script src="./js/water.js"></script>
 </body>
 
 </html>
