@@ -147,6 +147,33 @@ const contractABI = [
     }
 ];
 
+function link() {
+	
+
+	//const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+	const web3 = new Web3(window.ethereum);
+
+	if (typeof window.ethereum !== 'undefined') {
+		console.log('MetaMask已經安裝');
+	}
+
+	// 請求使用者連接MetaMask
+	ethereum.request({ method: 'eth_requestAccounts' })
+		.then(accounts => {
+			// 使用者已連接MetaMask
+			console.log('已連接MetaMask');
+		})
+		.catch(error => {
+			// 使用者拒絕連接MetaMask
+			Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+			console.log('拒絕連接MetaMask');
+		});
+
+
+	contract = new web3.eth.Contract(contractABI, CONTRACT_ADDRESS);
+
+}
+
 
 async function getData() {
     document.getElementById('goalAmount').textContent = "載入中..";
@@ -154,10 +181,36 @@ async function getData() {
     document.getElementById('numInvestors').textContent = "載入中..";
     document.getElementById('status').textContent = "載入中..";
     contractAddress = await document.getElementById("user-address").value;
-    provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    
+    //provider = new Web3.providers.HttpProvider('http://localhost:7545');
+
+
+
+
+    const web3 = new Web3(window.ethereum);
+
+	if (typeof window.ethereum !== 'undefined') {
+		console.log('MetaMask已經安裝');
+	}
+
+	// 請求使用者連接MetaMask
+	ethereum.request({ method: 'eth_requestAccounts' })
+		.then(accounts => {
+			// 使用者已連接MetaMask
+			console.log('已連接MetaMask');
+		})
+		.catch(error => {
+			// 使用者拒絕連接MetaMask
+			Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+			console.log('拒絕連接MetaMask');
+		});
+
+
+	contract = new web3.eth.Contract(contractABI, contractAddress);
+
 
     // 建立 Web3 實例
-    web3 = await new Web3(provider);
+    //web3 = await new Web3(provider);
 
     // 驗證合約地址的有效性
     if (!web3.utils.isAddress(contractAddress)) {
@@ -165,7 +218,7 @@ async function getData() {
         return;
     }
     // 建立合約實例
-    contract = await new web3.eth.Contract(contractABI, contractAddress);
+    //contract = await new web3.eth.Contract(contractABI, contractAddress);
 
 
     updateContractInfo();
