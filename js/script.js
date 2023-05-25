@@ -158,6 +158,11 @@ async function getData() {
     web3 = await new Web3(provider);
     // 建立合約實例
     contract = await new web3.eth.Contract(contractABI, contractAddress);
+    document.getElementById('goalAmount').textContent = "載入中..";
+    document.getElementById('totalAmount').textContent = "載入中..";
+    document.getElementById('numInvestors').textContent = "載入中..";
+    document.getElementById('status').textContent = "載入中..";
+
     updateContractInfo()
 }
 
