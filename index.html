@@ -41,15 +41,14 @@
                 </a>
                 <div class="section-content">
                     <div class="title-wrap">
-                        <h2 class="section-title animated-underline" >CrowdFunding Webpage<br>快速可靠<b> 公平、安全</b></h2>
+                        <h2 class="section-title animated-underline">CrowdFunding Webpage<br>快速可靠<b> 公平、安全</b></h2>
                         <p class="section-sub-title">利用區塊鏈的特性，數據不可修改不可否認 <br> 資料公開透明，目標未達成會退貨幣~</p>
                         <p class="section-sub-title">請輸入募款合約地址：</p>
                         <center>
                             <div style="width:550px;height:60px">
                                 <input type="text" autofocus="autofocus" class="form-control" id="user-address"
                                     style="text-align:center" />
-                                <button onclick="getData()" id="get-data"
-                                    class="btn-outline-secondary">獲取募款數據</button>
+                                <button onclick="getData()" id="get-data" class="btn-outline-secondary">獲取募款數據</button>
                             </div>
                         </center>
 
@@ -68,26 +67,28 @@
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-earth"></i>
                             <b><span id="goalAmount" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">0</span></b>
+                                    style="font-size: 60px; color: white;">0</span></b>
                             <h4>目標金額</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-drop"></i>
                             <b><span id="totalAmount" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">0</span></b>
+                                    style="font-size: 60px; color: white;">0</span></b>
                             <h4>投資總額</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-cloud"></i>
                             <b><span id="numInvestors" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">0</span></b>
+                                    style="font-size: 60px; color: white;">0</span></b>
                             <h4>投資人數</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-sync"></i>
-                            
+
                             <b><span id="status" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 52px; color: white;">等待輸入</span></b><p></p><p>
+                                    style="font-size: 52px; color: white;">等待輸入</span></b>
+                            <p></p>
+                            <p>
                             <h4>募款狀態</h4>
                         </div>
 
@@ -118,10 +119,10 @@
                                 style="font-size: 60px; color: black;">
                             <p>請自行檢查募資背景 </p>
                             <p>本網頁不負任何責任 </p>
-                            <p><a class="btn btn-orange" role="button" onclick="fund()"
-                                    id="update-water-usage">投資</a></p>
+                            <p><a class="btn btn-orange" role="button" onclick="fund()" id="update-water-usage">投資</a>
+                            </p>
                         </div>
-  
+
                         <div class="col-md-4 col-sm-6 ">
 
                         </div>
@@ -132,7 +133,7 @@
                                 width="140" height="140">
                             <h5 class="mb-4">確認目標金額</h5>
                             <b><span id="total-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: black;">　</span></b>
+                                    style="font-size: 60px; color: black;">　</span></b>
                             <p>確認是否達成目標金額</p>
                             <p>合約自動統計，募款失敗自動退費!!😁😁</p>
                             <p><a class="btn btn-orange" role="button" onclick="checkGoalReached()"
