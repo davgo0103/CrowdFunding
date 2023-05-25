@@ -239,9 +239,11 @@ function countdownTimer(deadline, elementId) {
 async function fund() {
     var status = await contract.methods.status().call();
     const investmentAmount = document.getElementById('investmentAmount').value;
-    if (investmentAmount <= 0) {
+    if (investmentAmount <= 0 && status == "Funding") {
         Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
         return;
+    }else{
+        Swal.fire('Opps!', '投資活動已結束!!', 'error')
     }
 
     try {
