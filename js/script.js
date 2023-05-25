@@ -148,29 +148,25 @@ const contractABI = [
 ];
 
 function link() {
+    const web3 = new Web3(window.ethereum);
+  
+    if (typeof window.ethereum !== 'undefined') {
+      console.log('MetaMask已經安裝');
+    }
+  
+    // 請求使用者連接MetaMask
+    ethereum.request({ method: 'eth_requestAccounts' })
+      .then(accounts => {
+        // 使用者已連接MetaMask
+        console.log('已連接MetaMask');
+      })
+      .catch(error => {
+        // 使用者拒絕連接MetaMask
+        Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+        console.log('拒絕連接MetaMask');
+      });
+
 	
-
-	//const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
-	const web3 = new Web3(window.ethereum);
-
-	if (typeof window.ethereum !== 'undefined') {
-		console.log('MetaMask已經安裝');
-	}
-
-	// 請求使用者連接MetaMask
-	ethereum.request({ method: 'eth_requestAccounts' })
-		.then(accounts => {
-			// 使用者已連接MetaMask
-			console.log('已連接MetaMask');
-		})
-		.catch(error => {
-			// 使用者拒絕連接MetaMask
-			Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
-			console.log('拒絕連接MetaMask');
-		});
-
-
-	contract = new web3.eth.Contract(contractABI, CONTRACT_ADDRESS);
 
 }
 
@@ -206,7 +202,7 @@ async function getData() {
 		});
 
 
-	contract = new web3.eth.Contract(contractABI, contractAddress);
+        contract = await new web3.eth.Contract(contractABI, contractAddress, { from: ethereum.selectedAddress });
 
 
     // 建立 Web3 實例
@@ -303,36 +299,33 @@ async function fund() {
     var status = await contract.methods.status().call();
     const investmentAmount = document.getElementById('investmentAmount').value;
     if (investmentAmount <= 0 && status == "Funding") {
-        Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
-        return;
+      Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
+      return;
     } else {
-        Swal.fire('Opps!', '投資活動已結束!!', 'error')
+      Swal.fire('Opps!', '投資活動已結束!!', 'error')
     }
-
+  
     try {
-        const accounts = await web3.eth.getAccounts();
-        const overrides = {
-            value: web3.utils.toWei(investmentAmount, 'ether')
-        };
-        await contract.methods.fund().send({ from: accounts[0], ...overrides, gas: '5000000' });
-        Swal.fire('Good!', '投資成功!!', 'success')
-        updateContractInfo();
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const weiAmount = investmentAmount * 10**18;
+      await contract.methods.fund().send({ from: accounts[0], value: weiAmount, gas: '5000000' });
+      Swal.fire('Good!', '投資成功!!', 'success')
+      updateContractInfo();
     } catch (error) {
-        console.error(error);
-        if (status != "Funding") {
-            Swal.fire('Opps!', '投資活動已結束!!', 'error')
-        }
-        else {
-            Swal.fire('Opps!', '投資失敗!!', 'error')
-        }
+      console.error(error);
+      if (status !== "Funding") {
+        Swal.fire('Opps!', '投資活動已結束!!', 'error')
+      } else {
+        Swal.fire('Opps!', '投資失敗!!', 'error')
+      }
     }
-}
+  }
+  
 
 async function checkGoalReached() {
     var status = await contract.methods.status().call();
     try {
-        const accounts = await web3.eth.getAccounts();
-        await contract.methods.checkGoalReached().send({ from: accounts[0], gas: '5000000' });
+        await contract.methods.checkGoalReached().send({ gas: '5000000' });
         const status = await contract.methods.status().call();
         if (status === "Campaign Succeeded") {
             Swal.fire('Good!', '目標金額已達成!!', 'success')
