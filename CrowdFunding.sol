@@ -7,7 +7,7 @@ contract CrowdFunding {
         address payable addr; // 投資家的位址
         uint256 amount; // 投資額
     }
-    
+
     address payable public owner; // 合約所有人
     uint256 public numInvestors; // 投資家數目
     uint256 public deadline; // 截止日期（UnixTime）
@@ -18,7 +18,10 @@ contract CrowdFunding {
     mapping(uint256 => Investor) public investors; // 管理投資家的對應表（map）
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only the contract owner can call this function");
+        require(
+            msg.sender == owner,
+            "Only the contract owner can call this function"
+        );
         _;
     }
 
@@ -49,7 +52,10 @@ contract CrowdFunding {
         // 若是活動已結束的話就中斷處理
         require(!ended, "The crowdfunding has ended");
         // 截止日期還沒到就中斷處理
-        require(block.timestamp >= deadline, "The deadline has not been reached");
+        require(
+            block.timestamp >= deadline,
+            "The deadline has not been reached"
+        );
 
         if (totalAmount >= goalAmount * 1000000000000000000) {
             // 活動成功的時候
@@ -65,7 +71,9 @@ contract CrowdFunding {
             ended = true;
             // 將ether退款給每位投資家
             while (i < numInvestors) {
-                (bool success, ) = investors[i].addr.call{value: investors[i].amount}("");
+                (bool success, ) = investors[i].addr.call{
+                    value: investors[i].amount
+                }("");
                 require(success, "Failed to refund funds to investors");
                 i++;
             }
