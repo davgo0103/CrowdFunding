@@ -48,8 +48,8 @@ body {
     opacity: .8;
     z-index: -1;
     background: #f12711;
-    background: -webkit-linear-gradient(to right, #f5af19, #f12711);
-    background: linear-gradient(to right, #f5af19, #f12711); }
+    background: -webkit-linear-gradient(to right, #bf36e9, #f12711);
+    background: linear-gradient(to right, #bf36e9, #f12711); }
 
 .boxed-page {
   margin: 0 auto;

@@ -189,14 +189,58 @@ async function updateContractInfo() {
     document.getElementById('totalAmount').textContent = (totalAmount / 1000000000000000000).toString();
     document.getElementById('numInvestors').textContent = numInvestors.toString();
     document.getElementById('status').textContent = status;
-    document.getElementById('deadline').textContent = new Date(deadline * 1000).toLocaleString();
+    // document.getElementById('deadline').textContent = new Date(deadline * 1000).toLocaleString();
+    countdownTimer(deadline, elementId);
 }
+
+function countdownTimer(deadline, elementId) {
+    // 取得目標元素
+    var element = document.getElementById(elementId);
+  
+    function updateTimer() {
+      // 取得現在時間和截止時間的毫秒數
+      var currentTime = new Date().getTime();
+      var targetTime = new Date(deadline * 1000).getTime();
+  
+      // 計算剩餘時間（毫秒）
+      var remainingTime = targetTime - currentTime;
+  
+      // 計算剩餘天、小時、分鐘和秒數
+      var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+  
+      // 更新元素內容為倒數計時器
+      if(contractAddress != ""){
+        element.textContent = days + "天 " + hours + "小時 " + minutes + "分鐘 " + seconds + "秒";
+      }else{
+        element.textContent = "等待輸入中..."
+      }
+      
+  
+      // 若還有剩餘時間，每秒更新一次
+      if (remainingTime > 0) {
+        setTimeout(updateTimer, 1000);
+      }else if(contractAddress != ""){
+        element.textContent = "募款活動已結束!"
+      }
+    }
+  
+    // 呼叫函式開始倒數計時
+    updateTimer();
+  }
+  
+  // 呼叫函式並指定截止時間和要更新的元素 ID
+  var elementId = "deadline";
+  countdownTimer(deadline, elementId);
 
 
 async function fund() {
+    var status = await contract.methods.status().call();
     const investmentAmount = document.getElementById('investmentAmount').value;
     if (investmentAmount <= 0) {
-        alert('投資金額必須大於零');
+        Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
         return;
     }
 
@@ -206,37 +250,38 @@ async function fund() {
             value: web3.utils.toWei(investmentAmount, 'ether')
         };
         await contract.methods.fund().send({ from: accounts[0], ...overrides, gas: '5000000' });
-        alert('投資成功！');
+        Swal.fire('Good!', '投資成功!!', 'success')
         updateContractInfo();
     } catch (error) {
         console.error(error);
         if (status != "Funding") {
-            alert('投資活動已結束！');
+            Swal.fire('Opps!', '投資活動已結束!!', 'error')
         }
         else {
-            alert('投資失敗！');
+            Swal.fire('Opps!', '投資失敗!!', 'error')
         }
     }
 }
 
 async function checkGoalReached() {
+    var status = await contract.methods.status().call();
     try {
         const accounts = await web3.eth.getAccounts();
         await contract.methods.checkGoalReached().send({ from: accounts[0], gas: '5000000' });
         const status = await contract.methods.status().call();
         if (status === "Campaign Succeeded") {
-            alert('目標金額已達成！');
+            Swal.fire('Good!', '目標金額已達成!!', 'success')
         } else if (status === "Campaign Failed") {
-            alert('目標金額未達成！');
+            Swal.fire('Opps!', '目標金額未達成!!', 'error')
         }
         updateContractInfo();
     } catch (error) {
         console.error(error);
         if (status != "Funding") {
-            alert('投資活動已結束！');
+            Swal.fire('Opps!', '投資活動已結束!!', 'error')
         }
         else {
-            alert('尚未到達截止時間！');
+            Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
         }
 
     }
