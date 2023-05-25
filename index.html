@@ -100,7 +100,12 @@
             <div class="container">
                 <div class="section-content">
                     <div class="title-wrap">
-                        
+                        <h5 class="section-title">
+                            截止時間 :<br>
+                            <span id="deadline" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 30px; color: black; width: 20%;">0</span>
+                        </h5>
+                        <p class="section-sub-title">合約自動統計，募款失敗自動退費!!😁</p>
                     </div>
 
 
@@ -118,12 +123,7 @@
                         </div>
   
                         <div class="col-md-4 col-sm-6 ">
-                            <h5 class="section-title">
-                                截止時間 :<br>
-                                <span id="deadline" class="input-as-span" value="0" data-refresh-interval="100"
-                                    style="font-size: 30px; color: black; width: 20%;">0</span>
-                            </h5>
-                            <p class="section-sub-title">合約自動統計，募款失敗自動退費!!😁</p>
+
                         </div>
 
 
@@ -131,8 +131,8 @@
                             <img class="rounded-circle" src="icons/animat-customize.gif" alt="Generic placeholder image"
                                 width="140" height="140">
                             <h5 class="mb-4">確認目標金額</h5>
-                            <input id="total-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: black;">
+                            <b><span id="total-input" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: black;">　</span></b>
                             <p>確認是否達成目標金額</p>
                             <p>合約自動統計，募款失敗自動退費!!😁😁</p>
                             <p><a class="btn btn-orange" role="button" onclick="checkGoalReached()"
