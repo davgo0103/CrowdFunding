@@ -42,14 +42,14 @@
                 <div class="section-content">
                     <div class="title-wrap">
                         <h2 class="section-title animated-underline" >CrowdFunding Webpage<br>快速可靠<b> 公平、安全</b></h2>
-                        <p class="section-sub-title">利用區塊鏈的特性，數據不可修改不可否認 <br> 資料公開透明，誰在浪費一看就知道~</p>
-                        <p class="section-sub-title">請輸入地址：</p>
+                        <p class="section-sub-title">利用區塊鏈的特性，數據不可修改不可否認 <br> 資料公開透明，目標未達成會退貨幣~</p>
+                        <p class="section-sub-title">請輸入募款合約地址：</p>
                         <center>
                             <div style="width:550px;height:60px">
                                 <input type="text" autofocus="autofocus" class="form-control" id="user-address"
                                     style="text-align:center" />
-                                <button onclick="getWaterData()" id="get-water-data"
-                                    class="btn-outline-secondary">獲取鏈上數據</button>
+                                <button onclick="getData()" id="get-data"
+                                    class="btn-outline-secondary">獲取募款數據</button>
                             </div>
                         </center>
 
@@ -67,27 +67,28 @@
                         <!-- Counter Item -->
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-earth"></i>
-                            <input id="usage-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">
-                            <h4>用水量</h4>
+                            <b><span id="goalAmount" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">0</span></b>
+                            <h4>目標金額</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-drop"></i>
-                            <input id="quality-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">
-                            <h4>水質</h4>
+                            <b><span id="totalAmount" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">0</span></b>
+                            <h4>投資總額</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-cloud"></i>
-                            <input id="reserve-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">
-                            <h4>儲水量</h4>
+                            <b><span id="numInvestors" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 60px; color: white;">0</span></b>
+                            <h4>投資人數</h4>
                         </div>
                         <div class="col-md-3 col-sm-6 counter-item">
                             <i class="lnr lnr-sync"></i>
-                            <input id="recycled-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 60px; color: white;">
-                            <h4>回收水量</h4>
+                            
+                            <b><span id="status" class="input-as-span" value="0" data-refresh-interval="100"
+                                style="font-size: 52px; color: white;">等待輸入</span></b><p></p><p>
+                            <h4>募款狀態</h4>
                         </div>
 
                     </div>
@@ -99,12 +100,7 @@
             <div class="container">
                 <div class="section-content">
                     <div class="title-wrap">
-                        <h5 class="section-title">
-                            計費數據 :<br>
-                            <input id="billing-input" class="input-as-span" value="0" data-refresh-interval="100"
-                                style="font-size: 30px; color: black; width: 20%;">
-                        </h5>
-                        <p class="section-sub-title">每日用水量低於平均，將有機會獲得虛擬貨幣!!😁</p>
+                        
                     </div>
 
 
@@ -112,36 +108,35 @@
                         <div class="col-md-4 col-sm-6 ">
                             <img class="rounded-circle" src="icons/animat-responsive.gif"
                                 alt="Generic placeholder image" width="140" height="140">
-                            <h5 class="mb-4">更新用水量</h5>
-                            <input id="update-total-input" class="input-as-span" value="0" data-refresh-interval="100"
+                            <h5 class="mb-4">投資</h5>
+                            <input id="investmentAmount" class="input-as-span" value="0" data-refresh-interval="100"
                                 style="font-size: 60px; color: black;">
-                            <p>模擬感測器在與API交互時的過程 </p>
-                            <p>每次更新用水量會將數值加在鏈上的總用水量上 </p>
-                            <p><a class="btn btn-orange" role="button" onclick="updateWaterUsage()"
-                                    id="update-water-usage">更新用水量</a></p>
+                            <p>請自行檢查募資背景 </p>
+                            <p>本網頁不負任何責任 </p>
+                            <p><a class="btn btn-orange" role="button" onclick="fund()"
+                                    id="update-water-usage">投資</a></p>
                         </div>
   
                         <div class="col-md-4 col-sm-6 ">
-                            <img class="rounded-circle" src="icons/animat-checkmark.gif" alt="Generic placeholder image"
-                                width="140" height="140">
-                            <h5 class="mb-4">更新水資源數據</h5>
-                            <p>直接修改上方資料</p>
-                            <p>模擬感測器在與API交互時的過程</p>
-                            <p><a onclick="setWaterData()" id="set-water-data" class="btn btn-orange"
-                                    role="button">更新水資源數據</a></p>
+                            <h5 class="section-title">
+                                截止時間 :<br>
+                                <span id="deadline" class="input-as-span" value="0" data-refresh-interval="100"
+                                    style="font-size: 30px; color: black; width: 20%;">0</span>
+                            </h5>
+                            <p class="section-sub-title">合約自動統計，募款失敗自動退費!!😁</p>
                         </div>
 
 
                         <div class="col-md-4 col-sm-6 ">
                             <img class="rounded-circle" src="icons/animat-customize.gif" alt="Generic placeholder image"
                                 width="140" height="140">
-                            <h5 class="mb-4">獲取總用水量</h5>
+                            <h5 class="mb-4">確認目標金額</h5>
                             <input id="total-input" class="input-as-span" value="0" data-refresh-interval="100"
                                 style="font-size: 60px; color: black;">
-                            <p>可以查看用水量加總</p>
-                            <p>每日用水量低於平均，將有機會獲得虛擬貨幣!!😁</p>
-                            <p><a class="btn btn-orange" role="button" onclick="getWaterUsage()"
-                                    id="get-water-usage">獲取總用水量</a></p>
+                            <p>確認是否達成目標金額</p>
+                            <p>合約自動統計，募款失敗自動退費!!😁😁</p>
+                            <p><a class="btn btn-orange" role="button" onclick="checkGoalReached()"
+                                    id="get-water-usage">確認目標金額</a></p>
                         </div>
 
                     </div>
@@ -206,7 +201,7 @@
     <script src="./js/sweetalert2.all.min.js"></script>
     <script src="./js/app.min.js "></script>
     <script src="./js/web3.min.js"></script>
-    <script src="./js/water.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 
 </html>
