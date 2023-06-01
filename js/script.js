@@ -311,7 +311,7 @@ async function fund() {
       updateContractInfo();
     } catch (error) {
       console.error(error);
-      if (status != "Funding") {
+      if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
       } else {
         Swal.fire('Opps!', '投資失敗!!', 'error')
