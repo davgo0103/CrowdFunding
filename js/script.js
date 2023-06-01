@@ -263,7 +263,7 @@ function countdownTimer(deadline, elementId) {
         var targetTime = new Date(deadline * 1000).getTime();
 
         // 計算剩餘時間（毫秒）
-        var remainingTime = targetTime - currentTime;
+        remainingTime = targetTime - currentTime;
 
         // 計算剩餘天、小時、分鐘和秒數
         var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
@@ -304,6 +304,7 @@ async function fund() {
         return;
     } else if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
+        return;
     }
 
     try {
@@ -325,22 +326,26 @@ async function fund() {
 
 async function checkGoalReached() {
     var status = await contract.methods.status().call();
+    if (status !== "Funding") {
+        Swal.fire('Opps!', '投資活動已結束!!', 'error')
+        return;
+    } else if (remainingTime > 0) {
+        Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
+        return;
+    }
     try {
-        await contract.methods.checkGoalReached().send({ gas: '5000000' });
         const status = await contract.methods.status().call();
         if (status === "Campaign Succeeded") {
             Swal.fire('Good!', '目標金額已達成!!', 'success')
         } else if (status === "Campaign Failed") {
             Swal.fire('Opps!', '目標金額未達成!!', 'error')
         }
+        await contract.methods.checkGoalReached().send({ gas: '5000000' });
         updateContractInfo();
     } catch (error) {
         console.error(error);
         if (status != "Funding") {
             Swal.fire('Opps!', '投資活動已結束!!', 'error')
-        }
-        else {
-            Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
         }
 
     }
