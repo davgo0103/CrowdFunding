@@ -148,7 +148,7 @@ const contractABI = [
 ];
 
 function link() {
-    const web3 = new Web3(window.ethereum);
+    web3 = new Web3(window.ethereum);
 
     if (typeof window.ethereum !== 'undefined') {
         console.log('MetaMask已經安裝');
@@ -182,24 +182,8 @@ async function getData() {
 
 
 
-
-    const web3 = new Web3(window.ethereum);
-
-    if (typeof window.ethereum !== 'undefined') {
-        console.log('MetaMask已經安裝');
-    }
-
-    // 請求使用者連接MetaMask
-    ethereum.request({ method: 'eth_requestAccounts' })
-        .then(accounts => {
-            // 使用者已連接MetaMask
-            console.log('已連接MetaMask');
-        })
-        .catch(error => {
-            // 使用者拒絕連接MetaMask
-            Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
-            console.log('拒絕連接MetaMask');
-        });
+    //連接錢包
+    await link();
 
 
 
@@ -329,7 +313,7 @@ async function checkGoalReached() {
     if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
         return;
-    }else if(remainingTime > 0){
+    } else if (remainingTime > 0) {
         Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
         return;
     }
