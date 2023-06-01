@@ -231,6 +231,10 @@ async function updateContractInfo() {
     // document.getElementById('deadline').textContent = new Date(deadline * 1000).toLocaleString();
     countdownTimer(deadline, elementId);
 }
+setInterval(function() {
+    updateContractInfo()
+  }, 5000); // 时间间隔为 5000 毫秒（5秒）
+
 
 function countdownTimer(deadline, elementId) {
     // 取得目標元素
