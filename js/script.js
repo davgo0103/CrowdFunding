@@ -301,8 +301,6 @@ async function fund() {
     if (investmentAmount <= 0 && status == "Funding") {
       Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
       return;
-    } else {
-      Swal.fire('Opps!', '投資活動已結束!!', 'error')
     }
   
     try {
@@ -313,7 +311,7 @@ async function fund() {
       updateContractInfo();
     } catch (error) {
       console.error(error);
-      if (status !== "Funding") {
+      if (status != "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
       } else {
         Swal.fire('Opps!', '投資失敗!!', 'error')
