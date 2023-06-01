@@ -149,24 +149,24 @@ const contractABI = [
 
 function link() {
     const web3 = new Web3(window.ethereum);
-  
+
     if (typeof window.ethereum !== 'undefined') {
-      console.log('MetaMask已經安裝');
+        console.log('MetaMask已經安裝');
     }
-  
+
     // 請求使用者連接MetaMask
     ethereum.request({ method: 'eth_requestAccounts' })
-      .then(accounts => {
-        // 使用者已連接MetaMask
-        console.log('已連接MetaMask');
-      })
-      .catch(error => {
-        // 使用者拒絕連接MetaMask
-        Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
-        console.log('拒絕連接MetaMask');
-      });
+        .then(accounts => {
+            // 使用者已連接MetaMask
+            console.log('已連接MetaMask');
+        })
+        .catch(error => {
+            // 使用者拒絕連接MetaMask
+            Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+            console.log('拒絕連接MetaMask');
+        });
 
-	
+
 
 }
 
@@ -177,7 +177,7 @@ async function getData() {
     document.getElementById('numInvestors').textContent = "載入中..";
     document.getElementById('status').textContent = "載入中..";
     contractAddress = await document.getElementById("user-address").value;
-    
+
     //provider = new Web3.providers.HttpProvider('http://localhost:7545');
 
 
@@ -185,24 +185,24 @@ async function getData() {
 
     const web3 = new Web3(window.ethereum);
 
-	if (typeof window.ethereum !== 'undefined') {
-		console.log('MetaMask已經安裝');
-	}
+    if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask已經安裝');
+    }
 
-	// 請求使用者連接MetaMask
-	ethereum.request({ method: 'eth_requestAccounts' })
-		.then(accounts => {
-			// 使用者已連接MetaMask
-			console.log('已連接MetaMask');
-		})
-		.catch(error => {
-			// 使用者拒絕連接MetaMask
-			Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
-			console.log('拒絕連接MetaMask');
-		});
+    // 請求使用者連接MetaMask
+    ethereum.request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+            // 使用者已連接MetaMask
+            console.log('已連接MetaMask');
+        })
+        .catch(error => {
+            // 使用者拒絕連接MetaMask
+            Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+            console.log('拒絕連接MetaMask');
+        });
 
 
-        contract = await new web3.eth.Contract(contractABI, contractAddress, { from: ethereum.selectedAddress });
+
 
 
     // 建立 Web3 實例
@@ -210,12 +210,13 @@ async function getData() {
 
     // 驗證合約地址的有效性
     if (!web3.utils.isAddress(contractAddress)) {
+
         Swal.fire('Opps!', '無效的合約地址!!', 'error')
         return;
     }
     // 建立合約實例
     //contract = await new web3.eth.Contract(contractABI, contractAddress);
-
+    contract = await new web3.eth.Contract(contractABI, contractAddress, { from: ethereum.selectedAddress });
 
     updateContractInfo();
 }
@@ -299,26 +300,28 @@ async function fund() {
     var status = await contract.methods.status().call();
     const investmentAmount = document.getElementById('investmentAmount').value;
     if (investmentAmount <= 0 && status == "Funding") {
-      Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
-      return;
-    }
-  
-    try {
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      const weiAmount = investmentAmount * 10**18;
-      await contract.methods.fund().send({ from: accounts[0], value: weiAmount, gas: '5000000' });
-      Swal.fire('Good!', '投資成功!!', 'success')
-      updateContractInfo();
-    } catch (error) {
-      console.error(error);
-      if (status !== "Funding") {
+        Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
+        return;
+    } else if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
-      } else {
-        Swal.fire('Opps!', '投資失敗!!', 'error')
-      }
     }
-  }
-  
+
+    try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const weiAmount = investmentAmount * 10 ** 18;
+        await contract.methods.fund().send({ from: accounts[0], value: weiAmount, gas: '5000000' });
+        Swal.fire('Good!', '投資成功!!', 'success')
+        updateContractInfo();
+    } catch (error) {
+        console.error(error);
+        if (status !== "Funding") {
+            Swal.fire('Opps!', '投資活動已結束!!', 'error')
+        } else {
+            Swal.fire('Opps!', '投資失敗!!', 'error')
+        }
+    }
+}
+
 
 async function checkGoalReached() {
     var status = await contract.methods.status().call();
