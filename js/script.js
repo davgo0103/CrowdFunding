@@ -183,23 +183,23 @@ async function getData() {
 
 
 
-        const web3 = new Web3(window.ethereum);
+    const web3 = new Web3(window.ethereum);
 
-        if (typeof window.ethereum !== 'undefined') {
-            console.log('MetaMask已經安裝');
-        }
+    if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask已經安裝');
+    }
 
-        // 請求使用者連接MetaMask
-        ethereum.request({ method: 'eth_requestAccounts' })
-            .then(accounts => {
-                // 使用者已連接MetaMask
-                console.log('已連接MetaMask');
-            })
-            .catch(error => {
-                // 使用者拒絕連接MetaMask
-                Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
-                console.log('拒絕連接MetaMask');
-            });
+    // 請求使用者連接MetaMask
+    ethereum.request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+            // 使用者已連接MetaMask
+            console.log('已連接MetaMask');
+        })
+        .catch(error => {
+            // 使用者拒絕連接MetaMask
+            Swal.fire('連線錯誤!', '你必須與網頁連線才能正常使用!', 'error');
+            console.log('拒絕連接MetaMask');
+        });
 
 
 
@@ -302,7 +302,7 @@ async function fund() {
     if (investmentAmount <= 0 && status == "Funding") {
         Swal.fire('Opps!', '投資金額必須大於零!!', 'error')
         return;
-    } else if (status !== "Funding") {
+    } else if (status !== "Funding" || remainingTime < 0) {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
         return;
     }
@@ -325,6 +325,7 @@ async function fund() {
 
 
 async function checkGoalReached() {
+
     var status = await contract.methods.status().call();
     if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
@@ -333,14 +334,16 @@ async function checkGoalReached() {
         Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
         return;
     }
+    await contract.methods.checkGoalReached().send({ gas: '5000000' });
     try {
-        const status = await contract.methods.status().call();
-        if (status === "Campaign Succeeded") {
+        status = await contract.methods.status().call();
+        console.log(status)
+        if (status == "Campaign Succeeded") {
             Swal.fire('Good!', '目標金額已達成!!', 'success')
-        } else if (status === "Campaign Failed") {
+        } else if (status == "Campaign Failed") {
             Swal.fire('Opps!', '目標金額未達成!!', 'error')
         }
-        await contract.methods.checkGoalReached().send({ gas: '5000000' });
+
         updateContractInfo();
     } catch (error) {
         console.error(error);
