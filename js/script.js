@@ -329,7 +329,7 @@ async function checkGoalReached() {
     if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
         return;
-    } else if (remainingTime > 0) {
+    }else if(remainingTime > 0){
         Swal.fire('Opps!', '尚未到達截止時間!!', 'error')
         return;
     }
