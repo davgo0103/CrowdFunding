@@ -56,8 +56,8 @@ contract CrowdFunding {
             block.timestamp >= deadline,
             "The deadline has not been reached"
         );
-
-        if (totalAmount >= goalAmount * 1000000000000000000) {
+// * 1000000000000000000
+        if (totalAmount >= goalAmount) {
             // 活動成功的時候
             status = "Campaign Succeeded";
             ended = true;
