@@ -1,6 +1,20 @@
 // 請修改以下的 ABI
 const contractABI = [
     {
+        "inputs": [],
+        "name": "checkGoalReached",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "fund",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -15,13 +29,6 @@ const contractABI = [
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
-    },
-    {
-        "inputs": [],
-        "name": "checkGoalReached",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
     },
     {
         "inputs": [],
@@ -47,13 +54,6 @@ const contractABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "fund",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -392,3 +392,39 @@ function updateDisplayValues(unit) {
 function not_install() {
     Swal.fire("錯誤!!", "尚未安裝MetaMask，以及連接區塊鏈網路", "error");
 }
+
+
+async function displayInvestors() {
+    if (!install) {
+        not_install();
+        return;
+    }
+    try {
+        // 讀取投資者資料
+        const numInvestors = await contract.methods.numInvestors().call();
+        const investors = [];
+        for (let i = 0; i < numInvestors; i++) {
+            const investor = await contract.methods.investors(i).call();
+            investors.push(investor);
+        }
+
+        // 格式化並顯示投資者資料
+        let html = '<table style="white-space: nowrap; margin: 0 auto;"><tr><th style="text-align: left;">地址</th><th>數量</th></tr>';
+        for (let i = 0; i < investors.length; i++) {
+            const investor = investors[i];
+            html += `<tr><td style="text-align: center;">${investor.addr}</td><td style="padding: 0 10px;">${investor.amount}</td></tr>`;
+        }
+        html += '</table>';
+
+        await Swal.fire({
+            title: '投資者',
+            html: html,
+            confirmButtonText: '關閉',
+            width: '20%' // 自定義彈窗寬度
+        });
+    } catch (error) {
+        console.error('無法顯示投資者:', error);
+    }
+}
+
+
