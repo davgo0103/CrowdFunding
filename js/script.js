@@ -412,7 +412,12 @@ async function displayInvestors() {
         let html = '<table style="white-space: nowrap; margin: 0 auto;"><tr><th style="text-align: left;">地址</th><th>數量</th></tr>';
         for (let i = 0; i < investors.length; i++) {
             const investor = investors[i];
-            html += `<tr><td style="text-align: center;">${investor.addr}</td><td style="padding: 0 10px;">${investor.amount}</td></tr>`;
+            if(wei_unit){
+                tmp = investor.amount
+            }else{
+                tmp = investor.amount / 1000000000000000000;
+            }
+            html += `<tr><td style="text-align: center;">${investor.addr}</td><td style="padding: 0 10px;">${tmp}</td></tr>`;
         }
         html += '</table>';
 
