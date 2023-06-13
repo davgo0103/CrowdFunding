@@ -56,6 +56,17 @@
                                     </tr>
                                 </table>
 
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="displayUnitDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        使用單位
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="displayUnitDropdown">
+                                        <a class="dropdown-item" href="#" onclick="setDisplayUnit('wei')">Wei</a>
+                                        <a class="dropdown-item" href="#" onclick="setDisplayUnit('eth')">ETH</a>
+                                    </div>
+                                </div>
+                                <p>預設使用WEI顯示</p>
+                                <br>
                                 <button onclick="getData()" id="get-data" class="btn-outline-secondary">獲取募款數據</button>
                             </div>
                         </center>

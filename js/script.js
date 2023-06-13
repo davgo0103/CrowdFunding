@@ -147,6 +147,8 @@ const contractABI = [
     }
 ];
 
+wei_unit = true;
+
 function link() {
     web3 = new Web3(window.ethereum);
 
@@ -224,16 +226,24 @@ async function updateContractInfo() {
     }
 
     // 更新網頁上的資訊
-    document.getElementById('goalAmount').textContent = goalAmount.toString();
-    document.getElementById('totalAmount').textContent = (totalAmount / 1000000000000000000).toString();
+    if (wei_unit) { //如果以Wei顯示
+        document.getElementById('goalAmount').textContent = goalAmount.toString();
+        document.getElementById('totalAmount').textContent = totalAmount.toString();
+    } else {
+        document.getElementById('goalAmount').textContent = (goalAmount / 1000000000000000000).toString();
+        document.getElementById('totalAmount').textContent = (totalAmount / 1000000000000000000).toString();
+    }
+
+
+
     document.getElementById('numInvestors').textContent = numInvestors.toString();
     document.getElementById('status').textContent = status;
     // document.getElementById('deadline').textContent = new Date(deadline * 1000).toLocaleString();
     countdownTimer(deadline, elementId);
 }
-setInterval(function() {
+setInterval(function () {
     updateContractInfo()
-  }, 5000); // 时间间隔为 5000 毫秒（5秒）
+}, 5000); // 时间间隔为 5000 毫秒（5秒）
 
 
 function countdownTimer(deadline, elementId) {
@@ -292,7 +302,11 @@ async function fund() {
 
     try {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        const weiAmount = investmentAmount * 10 ** 18;
+        if (wei_unit) { //如果以Wei顯示
+            const weiAmount = investmentAmount;
+        } else {
+            const weiAmount = investmentAmount * 10 ** 18;
+        }
         await contract.methods.fund().send({ from: accounts[0], value: weiAmount, gas: '5000000' });
         Swal.fire('Good!', '投資成功!!', 'success')
         updateContractInfo();
@@ -336,4 +350,23 @@ async function checkGoalReached() {
 
     }
 }
+
+// 處理顯示單位選擇的函式
+function setDisplayUnit(unit) {
+    // 更新顯示單位的值
+    document.getElementById("displayUnitDropdown").textContent = unit.toUpperCase();
+    updateDisplayValues(unit);
+    console.log(unit)
+}
+
+// 根據選擇的單位更新網頁上顯示的數值的函式
+function updateDisplayValues(unit) {
+    if(unit == "wei" ){
+        wei_unit = true;
+    }else{
+        wei_unit = false;
+    }
+    updateContractInfo();
+}
+
 
