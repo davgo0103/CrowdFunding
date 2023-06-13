@@ -10,7 +10,7 @@
     <title>CrowdFunding Webpage</title>
     <link rel="icon" type="image/x-icon" href="./img/recycling-water.png">
     <meta name="description" content="Core HTML Project">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
     <!-- External CSS -->
     <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
@@ -222,6 +222,30 @@
     <script src="./js/app.min.js "></script>
     <script src="./js/web3.min.js"></script>
     <script src="./js/script.js"></script>
+    <script>
+        // 使用 window.onload 事件
+        window.onload = function() {
+          Swal.fire({
+            title: "預設的合約地址",
+            html: "0xd45e4a541370E7F97f535725e50bB948772baBE6",
+            icon: "info",
+            confirmButtonText: "複製",
+            didOpen: () => {
+              const confirmButton = Swal.getConfirmButton();
+              confirmButton.addEventListener("click", () => {
+                const textToCopy = document.createElement("textarea");
+                textToCopy.value = "0xd45e4a541370E7F97f535725e50bB948772baBE6";
+                document.body.appendChild(textToCopy);
+                textToCopy.select();
+                document.execCommand("copy");
+                document.body.removeChild(textToCopy);
+    
+                Swal.fire("已成功複製", "請自行貼上查詢，謝謝!", "success");
+              });
+            }
+          });
+        };
+      </script>
 </body>
 
 </html>

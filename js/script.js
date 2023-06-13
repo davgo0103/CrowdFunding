@@ -149,6 +149,7 @@ const contractABI = [
 
 wei_unit = true;
 
+
 function link() {
     web3 = new Web3(window.ethereum);
 
@@ -201,9 +202,6 @@ async function getData() {
 
     updateContractInfo();
 }
-
-
-
 
 
 
@@ -375,5 +373,4 @@ function updateDisplayValues(unit) {
     }
     updateContractInfo();
 }
-
 
