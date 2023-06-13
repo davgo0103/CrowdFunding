@@ -148,13 +148,18 @@ const contractABI = [
 ];
 
 wei_unit = true;
+install = false;
 
 
 function link() {
     web3 = new Web3(window.ethereum);
 
     if (typeof window.ethereum !== 'undefined') {
+        install = true;
         console.log('MetaMask已經安裝');
+    } else {
+        not_install()
+        return;
     }
 
     // 請求使用者連接MetaMask
@@ -240,7 +245,10 @@ async function updateContractInfo() {
     countdownTimer(deadline, elementId);
 }
 setInterval(function () {
-    updateContractInfo()
+    if (install) {
+        updateContractInfo()
+    }
+
 }, 5000); // 时间间隔为 5000 毫秒（5秒）
 
 
@@ -288,6 +296,10 @@ countdownTimer(deadline, elementId);
 
 
 async function fund() {
+    if (!install) {
+        not_install();
+        return;
+    }
     var status = await contract.methods.status().call();
     const investmentAmount = document.getElementById('investmentAmount').value;
     if (investmentAmount <= 0 && status == "Funding") {
@@ -327,7 +339,10 @@ async function fund() {
 
 
 async function checkGoalReached() {
-
+    if (!install) {
+        not_install();
+        return;
+    }
     var status = await contract.methods.status().call();
     if (status !== "Funding") {
         Swal.fire('Opps!', '投資活動已結束!!', 'error')
@@ -374,3 +389,6 @@ function updateDisplayValues(unit) {
     updateContractInfo();
 }
 
+function not_install() {
+    Swal.fire("錯誤!!", "尚未安裝MetaMask，以及連接區塊鏈網路", "error");
+}
