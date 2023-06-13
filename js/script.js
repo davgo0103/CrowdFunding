@@ -302,10 +302,17 @@ async function fund() {
 
     try {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        console.log(investmentAmount);
         if (wei_unit) { //如果以Wei顯示
-            const weiAmount = investmentAmount;
+            if (investmentAmount < 1) {
+                Swal.fire("錯誤!", "您目前使用的單位是Wei，不支援小數..", "error");
+                return;
+            } else {
+                var weiAmount = investmentAmount;
+            }
+
         } else {
-            const weiAmount = investmentAmount * 10 ** 18;
+            var weiAmount = investmentAmount * 10 ** 18;
         }
         await contract.methods.fund().send({ from: accounts[0], value: weiAmount, gas: '5000000' });
         Swal.fire('Good!', '投資成功!!', 'success')
@@ -361,9 +368,9 @@ function setDisplayUnit(unit) {
 
 // 根據選擇的單位更新網頁上顯示的數值的函式
 function updateDisplayValues(unit) {
-    if(unit == "wei" ){
+    if (unit == "wei") {
         wei_unit = true;
-    }else{
+    } else {
         wei_unit = false;
     }
     updateContractInfo();
