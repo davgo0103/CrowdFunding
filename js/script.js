@@ -425,7 +425,7 @@ async function displayInvestors() {
             title: '投資者',
             html: html,
             confirmButtonText: '關閉',
-            width: '20%' // 自定義彈窗寬度
+            width: 'auto' // 自定義彈窗寬度
         });
     } catch (error) {
         console.error('無法顯示投資者:', error);
