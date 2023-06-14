@@ -3,7 +3,7 @@
 <html lang="zh_tw">
 
 <head>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=2">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,7 +43,8 @@
                     <div class="title-wrap">
                         <h2 class="section-title animated-underline">CrowdFunding Webpage<br>快速可靠<b> 公平、安全</b></h2>
                         <p class="section-sub-title">利用區塊鏈的特性，數據不可修改不可否認 <br> 資料公開透明，目標未達成會退貨幣~</p>
-                        <p class="animated-underline">會依據使用者連接的區塊鏈網路進行合約查詢!<p>
+                        <p class="animated-underline">會依據使用者連接的區塊鏈網路進行合約查詢!
+                        <p>
                         <p class="section-sub-title">請輸入募款合約地址：</p>
                         <center>
                             <div>
@@ -57,7 +58,9 @@
                                 </table>
 
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="displayUnitDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="displayUnitDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
                                         使用單位
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="displayUnitDropdown">
@@ -230,28 +233,34 @@
     <script src="./js/script.js"></script>
     <script>
         // 使用 window.onload 事件
-        window.onload = function() {
-          Swal.fire({
-            title: "預設的合約地址",
-            html: "0xd45e4a541370E7F97f535725e50bB948772baBE6",
-            icon: "info",
-            confirmButtonText: "複製",
-            didOpen: () => {
-              const confirmButton = Swal.getConfirmButton();
-              confirmButton.addEventListener("click", () => {
-                const textToCopy = document.createElement("textarea");
-                textToCopy.value = "0xd45e4a541370E7F97f535725e50bB948772baBE6";
-                document.body.appendChild(textToCopy);
-                textToCopy.select();
-                document.execCommand("copy");
-                document.body.removeChild(textToCopy);
-    
-                Swal.fire("已成功複製", "請自行貼上查詢，謝謝!", "success");
-              });
-            }
-          });
+        window.onload = function () {
+            Swal.fire({
+                title: "預設的合約地址",
+                html: "0xd45e4a541370E7F97f535725e50bB948772baBE6",
+                icon: "info",
+                footer: '歡迎各位點進來看的，把自己的合約拿來我這查詢哦~🙂',
+                confirmButtonText: "複製",
+                didOpen: () => {
+                    const confirmButton = Swal.getConfirmButton();
+                    confirmButton.addEventListener("click", () => {
+                        const textToCopy = document.createElement("textarea");
+                        textToCopy.value = "0xd45e4a541370E7F97f535725e50bB948772baBE6";
+                        document.body.appendChild(textToCopy);
+                        textToCopy.select();
+                        document.execCommand("copy");
+                        document.body.removeChild(textToCopy);
+
+                        Swal.fire({
+                            title: "已成功複製",
+                            icon: "success",
+                            text: "請自行貼上查詢，謝謝!",
+                            footer: '各位行行好~捐點錢再走吧..',
+                        });
+                    });
+                }
+            });
         };
-      </script>
+    </script>
 </body>
 
 </html>
